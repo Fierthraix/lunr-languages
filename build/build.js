@@ -59,6 +59,11 @@ var list = [
     wordCharacters: wordCharacters('Latin'),
     warningMessage: '[Lunr Languages] Please use the "nl" instead of the "du". The "nl" code is the standard code for Dutch language, and "du" will be removed in the next major versions.'
 }, {
+    locale: 'eo',
+    file: "EsperantoStreamer.js",
+    stopwords: stopwordsRepoFolder + 'eo.csv',
+    wordCharacters: wordCharacters('Latin'),
+}, {
     locale: 'fi',
     file: 'FinnishStemmer.js',
     stopwords: stopwordsRepoFolder + 'fn.csv',
