@@ -72,41 +72,39 @@
             /* create the wrapped stemmer object */
             var Among = lunr.stemmerSupport.Among,
                 SnowballProgram = lunr.stemmerSupport.SnowballProgram,
-            st = new function EsperantoStemmer() {
-              var word = null;
+                st = new function EsperantoStemmer() {
+                    var word = null;
 
-              this.setCurrent = function(word) {
-                this.word = word;
-              };
-              this.getCurrent = function() {
-                return this.word;
-              };
-              this.stem = function() {
-                // Words can end in 
-                // is, as, os, us, u, e, en, a, an aj, ajn, o, on, oj, ojn
-                // Every word at this point is guaranteed to have 3 letters
+                    this.setCurrent = function(word) {
+                        this.word = word;
+                    };
+                    this.getCurrent = function() {
+                        return this.word;
+                    };
+                    this.stem = function() {
+                        // Every word at this point is guaranteed to have 3 letters
+                        var endings = [ "is", "as", "os", "us", "u", "e", "en",
+                            "a", "an" "aj", "ajn", "o", "on", "oj", "ojn" ];
 
-                if (word.length == 1) {
-                  return;
-                } else if (word.length == 2) {
-                  if (word.charAt(-1) == "o") {
-                    this.word = word.charAt(0);
-                  }
-                  return;
-                // The word has at least 3 letters
-                } else {
-                  var last_3 = word.slice(-3);
-                  var last = last_3.charAt(-1);
-
-                  // Verb: is, as, os, us
-                  if (last == "s") {
-                    this.word = word.substr(0, word.length-2);
-                    return;
-                  }
-
-                }
-              }
-            };
+                        if (this.word.length == 1) {
+                            return;
+                        } else if (this.word.length == 2) {
+                            if (this.word.charAt(-1) == "o") {
+                                this.word = this.word.charAt(0);
+                            }
+                            return;
+                        // The word has at least 3 letters
+                        } else {
+                            for (var i = 0; i < endings.length; i++) {
+                                var ending = endings[i];
+                                if (word.endsWith(ending)) {
+                                    this.word = this.word.slice(-ending.length);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                };
 
             /* and return a function that stems a word for the current locale */
             return function(token) {
